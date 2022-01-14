@@ -17,5 +17,14 @@ app.get("/", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+app.get("/posts", (req, res) => {
+  models.Post.findAll()
+    .then((post) => {
+      console.log(post);
+      res.sendStatus(200);
+    })
+    .catch((err) => console.log(err));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
