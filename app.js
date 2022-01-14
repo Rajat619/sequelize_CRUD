@@ -34,16 +34,16 @@ app.post("/create-user", async (req, res) => {
     name: req.body.name,
     email: req.body.email,
   });
-  res.send("Done");
+  res.send("User Created");
 });
 
 app.post("/create-post", async (req, res) => {
   const post_name = await models.Post.create({
     id: req.body.id,
     title: req.body.title,
-    // user_id: req.body.user_id,
+    user_id: req.body.user_id,
   });
-  res.send("Done");
+  res.send("Post Created");
 });
 
 const PORT = process.env.PORT || 3000;
