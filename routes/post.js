@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const { Sequelize } = require("sequelize");
 const router = express.Router();
 
+//Models
 const models = require("../models");
 
+// Get all posts
 router.get("/posts", (req, res) => {
   models.Post.findAll()
     .then((post) => {
@@ -14,13 +16,15 @@ router.get("/posts", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Create post
 router.post("/create-post", async (req, res) => {
   const post_name = await models.Post.create({
     id: req.body.id,
     title: req.body.title,
     user_id: req.body.user_id,
-  });
-  res.send("Post Created");
+  })
+    .then((post) => res.redirect("/posts"))
+    .catch((err) => res.render("error", { error: err.message }));
 });
 
 module.exports = router;
