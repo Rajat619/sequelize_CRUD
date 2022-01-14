@@ -27,4 +27,29 @@ router.post("/create-post", async (req, res) => {
     .catch((err) => res.render("error", { error: err.message }));
 });
 
+// Update post
+router.post("/update-post/:id", async (req, res) => {
+  await models.Post.update(
+    { title: req.body.title },
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((success) => res.redirect("/posts"))
+    .catch((err) => res.render("error", { error: err.message }));
+});
+
+// Delete post
+router.get("/delete-post/:id", async (req, res) => {
+  await models.Post.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((success) => res.redirect("/posts"))
+    .catch((err) => res.render("error", { error: err.message }));
+});
+
 module.exports = router;
