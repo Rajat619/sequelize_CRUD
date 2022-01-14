@@ -7,7 +7,7 @@ const router = express.Router();
 const models = require("../models");
 
 // Get all posts
-router.get("/posts", (req, res) => {
+router.get("/", (req, res) => {
   models.Post.findAll()
     .then((post) => {
       console.log(post);
@@ -17,7 +17,7 @@ router.get("/posts", (req, res) => {
 });
 
 // Create post
-router.post("/create-post", async (req, res) => {
+router.post("/", async (req, res) => {
   const post_name = await models.Post.create({
     id: req.body.id,
     title: req.body.title,
@@ -28,7 +28,7 @@ router.post("/create-post", async (req, res) => {
 });
 
 // Update post
-router.post("/update-post/:id", async (req, res) => {
+router.post("/:id", async (req, res) => {
   await models.Post.update(
     { title: req.body.title },
     {
@@ -42,7 +42,7 @@ router.post("/update-post/:id", async (req, res) => {
 });
 
 // Delete post
-router.get("/delete-post/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   await models.Post.destroy({
     where: {
       id: req.params.id,
