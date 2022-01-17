@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { Sequelize } = require("sequelize");
 const router = express.Router();
+var sequelize = require("sequelize");
 
 //Models
 const models = require("../models");
@@ -10,21 +11,30 @@ const models = require("../models");
 router.get("/", (req, res) => {
   models.Post.findAll()
     .then((post) => {
-      console.log(post);
-      res.sendStatus(200);
+      res.json(post);
     })
     .catch((err) => console.log(err));
 });
 
 // Create post
 router.post("/", async (req, res) => {
-  const post_name = await models.Post.create({
-    id: req.body.id,
-    title: req.body.title,
-    user_id: req.body.user_id,
-  })
-    .then((post) => res.redirect("/posts"))
-    .catch((err) => res.render("error", { error: err.message }));
+  const t = await models.sequelize.transaction();
+  try {
+    const post_name = await models.Post.create(
+      {
+        id: req.body.id,
+        title: req.body.title,
+        user_id: req.body.user_id,
+      },
+      { transaction: t }
+    );
+    await t.commit().then((post) => res.redirect("/"));
+  } catch (error) {
+    await t.rollback();
+  }
+
+  // .then((post) => res.redirect("/"))
+  // .catch((err) => res.render("error", { error: err.message }));
 });
 
 // Update post
