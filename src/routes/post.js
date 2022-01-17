@@ -10,8 +10,14 @@ const models = require("../models");
 // Get all posts
 router.get("/", (req, res) => {
   models.Post.findAll()
-    .then((post) => {
-      res.json(post);
+    .then((posts) => {
+      res.json({
+        success: true,
+        message: "Your post was created successfully!",
+        data: {
+          posts,
+        },
+      });
     })
     .catch((err) => console.log(err));
 });
