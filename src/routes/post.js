@@ -32,9 +32,6 @@ router.post("/", async (req, res) => {
   } catch (error) {
     await t.rollback();
   }
-
-  // .then((post) => res.redirect("/"))
-  // .catch((err) => res.render("error", { error: err.message }));
 });
 
 // Update post
