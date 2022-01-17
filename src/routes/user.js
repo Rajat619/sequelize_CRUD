@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { Sequelize } = require("sequelize");
 const router = express.Router();
+const { authSchema } = require("../validator-schema");
 
 // Model
 const models = require("../models");
@@ -10,14 +11,16 @@ const models = require("../models");
 router.get("/", (req, res) => {
   models.User.findAll()
     .then((user) => {
-      console.log(user);
-      res.sendStatus(200);
+      res.json(user);
     })
     .catch((err) => console.log(err));
 });
 
 //  Create User
 router.post("/create-user", async (req, res) => {
+  const result = await authSchema.validateAsync(req.body);
+  console.log(result);
+
   const user_name = await models.User.create({
     id: req.body.id,
     name: req.body.name,
